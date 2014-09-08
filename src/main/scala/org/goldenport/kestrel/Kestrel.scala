@@ -6,7 +6,7 @@ import scala.language.implicitConversions
  * http://stackoverflow.com/questions/9671620/how-to-keep-return-value-when-effectging-in-scala
  * 
  * @since   Sep.  6, 2014
- * @version Sep.  6, 2014
+ * @version Sep.  8, 2014
  * @author  ASAMI, Tomoharu
  */
 object Kestrel {
@@ -32,6 +32,48 @@ object Kestrel {
   implicit class KestrelTap[T](val value: T) extends AnyVal {
     def tap(f: T => Unit): T = kestrel(value)(f)
 
+    def @@(label: String)(implicit effect: KestrelEffect): T = {
+      effect.execute(label, value)
+      value
+    }
+ 
+    def @@(implicit effect: KestrelEffect): T = {
+      effect.execute("MAP", value)
+      value
+    }
+
+    def @@>[U](label: String)(f: T => U)(implicit effect: KestrelEffect): U = {
+      val r = f(value)
+      effect.execute(label, value, r)
+      r
+    }
+
+    def @@>[U](f: T => U)(implicit effect: KestrelEffect): U = {
+      val r = f(value)
+      effect.execute("APPLY", value, r)
+      r
+    }
+
+    def @@?(f: T => Boolean, g: String): T = {
+      require (f(value), "$g: $value")
+      value
+    }
+
+    def @@??(g: T => String)(f: T => Boolean): T = {
+      require (f(value), g)
+      value
+    }
+
+    def @@@?: (f: T => Boolean, g: String): T = {
+      assert (f(value), "$g: $value")
+      value
+    }
+
+    def @@@??: (g: T => String)(f: T => Boolean): T = {
+      assert (f(value), "$g: $value")
+      value
+    }
+
     // def @@@(label: String)(implicit effect: KestrelEffect) : T = {
     //   effect.execute(label, value)
     //   value
@@ -42,36 +84,14 @@ object Kestrel {
     //   value
     // }
 
-    def |@>[U](label: String)(f: T => U)(implicit effect: KestrelEffect): U = {
-      val r = f(value)
-      effect.execute(label, value, r)
-      r
-    }
-
-    def |@>[U](f: T => U)(implicit effect: KestrelEffect): U = {
-      val r = f(value)
-      effect.execute("APPLY", value, r)
-      r
-    }
-
-    def |@=(label: String)(implicit effect: KestrelEffect): T = {
-      effect.execute(label, value)
-      value
-    }
+    // def |@=(label: String)(implicit effect: KestrelEffect): T = {
+    //   effect.execute(label, value)
+    //   value
+    // }
  
-    def |@=(implicit effect: KestrelEffect): T = {
-      effect.execute("MAP", value)
-      value
-    }
-
-    def @@(label: String)(implicit effect: KestrelEffect): T = {
-      effect.execute(label, value)
-      value
-    }
- 
-    def @@(implicit effect: KestrelEffect): T = {
-      effect.execute("MAP", value)
-      value
-    }
+    // def |@=(implicit effect: KestrelEffect): T = {
+    //   effect.execute("MAP", value)
+    //   value
+    // }
   }
 }
