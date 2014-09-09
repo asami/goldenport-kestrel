@@ -6,7 +6,7 @@ import scala.language.implicitConversions
  * http://stackoverflow.com/questions/9671620/how-to-keep-return-value-when-effectging-in-scala
  * 
  * @since   Sep.  6, 2014
- * @version Sep.  8, 2014
+ * @version Sep. 10, 2014
  * @author  ASAMI, Tomoharu
  */
 object Kestrel {
@@ -55,7 +55,7 @@ object Kestrel {
     }
 
     def @@?(f: T => Boolean, g: String): T = {
-      require (f(value), "$g: $value")
+      require (f(value), s"$g: $value")
       value
     }
 
@@ -65,12 +65,12 @@ object Kestrel {
     }
 
     def @@@?: (f: T => Boolean, g: String): T = {
-      assert (f(value), "$g: $value")
+      assert (f(value), s"$g: $value")
       value
     }
 
     def @@@??: (g: T => String)(f: T => Boolean): T = {
-      assert (f(value), "$g: $value")
+      assert (f(value), s"$g: $value")
       value
     }
 
