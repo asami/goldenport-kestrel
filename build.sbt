@@ -2,11 +2,11 @@ organization := "org.goldenport"
 
 name := "goldenport-kestrel"
 
-version := "2.0.0"
+version := "2.1.0"
 
-scalaVersion := "2.11.6"
+scalaVersion := "2.12.7"
 
-crossScalaVersions := Seq("2.11.6", "2.10.5")
+// crossScalaVersions := Seq("2.11.6", "2.10.5")
 
 scalacOptions += "-deprecation"
 
@@ -21,7 +21,7 @@ resolvers += "Asami Maven Repository" at "http://www.asamioffice.com/maven"
 resolvers += "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository"
 
 // Defines important library dependencies
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.4" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
 
 libraryDependencies += "junit" % "junit" % "4.8" % "test"
 
